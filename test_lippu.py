@@ -1,5 +1,7 @@
 """Testit lippu.py-moduulille. Täydennä tehtävien mukaan (ks. README.md)."""
 
+from typing import Literal
+
 import pytest
 
 from lippu import kokonaishinta, lippuhinta
@@ -31,7 +33,7 @@ def test_aikuisen_hinta():
         (120, 10.0),
     ],
 )
-def test_lippuhinta_raja_arvot(ika, odotettu):
+def test_lippuhinta_raja_arvot(ika: Literal[0] | Literal[6] | Literal[7] | Literal[17] | Literal[18] | Literal[64] | Literal[65] | Literal[120], odotettu: float):
     assert lippuhinta(ika) == odotettu
 
 
@@ -40,7 +42,7 @@ def test_lippuhinta_raja_arvot(ika, odotettu):
 # TEHTÄVÄ 3: Virheelliset iät nostavat ValueErrorin.
 # Vinkki: with pytest.raises(ValueError):
 @pytest.mark.parametrize("virheellinen_ika", [-10, -1, 121, 150])
-def test_lippuhinta_virheellinen_ika(virheellinen_ika):
+def test_lippuhinta_virheellinen_ika(virheellinen_ika: Literal[-10] | Literal[-1] | Literal[121] | Literal[150]):
     with pytest.raises(ValueError):
         lippuhinta(virheellinen_ika)
 
@@ -60,3 +62,11 @@ def test_kokonaishinta_kymmenen_aikuista_ryhmaalennus():
     # 10 * 15.0 = 150.0 €, 10 % alennus -> 135.0 €
     iat = [30] * 10
     assert kokonaishinta(iat) == pytest.approx(135.0)
+
+def test_opiskelijan_hinta():
+    assert lippuhinta(18, opiskelija=True) == 10.0
+    assert lippuhinta(20, opiskelija=True) == 10.0
+    assert lippuhinta(64, opiskelija=True) == 10.0
+    # Lapsi ja eläkeläinen pitävät oman hintansa
+    assert lippuhinta(15, opiskelija=True) == 8.0
+    assert lippuhinta(70, opiskelija=True) == 10.0
