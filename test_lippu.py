@@ -70,3 +70,4 @@ def test_opiskelijan_hinta():
     # Lapsi ja eläkeläinen pitävät oman hintansa
     assert lippuhinta(15, opiskelija=True) == 8.0
     assert lippuhinta(70, opiskelija=True) == 10.0
+
